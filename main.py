@@ -12,10 +12,13 @@ async def root():
 
 
 @app.get("/items/{item_id}")
-async def read_item(item_id: int, q: Optional[str] = None):
+async def read_item(item_id: int, q: Optional[str] = None, short: bool = False):
+    item = {"item_id": item_id}
     if q:
-        return {"item_id": item_id, "q": q}
-    return {"item_id": item_id}
+        item.update({"item_id": item_id})
+    if not short:
+        item.update({"q": q})
+    return item
 
 
 class ModelName(str, Enum):
