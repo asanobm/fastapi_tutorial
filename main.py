@@ -39,6 +39,13 @@ async def get_model(model_name: ModelName):
     return {"model_name": model_name, "message": "Have some residuals"}
 
 
+class Item(BaseModel):
+    name: str
+    description: Optional[str] = None
+    price: float
+    tax: Optional[float] = None
+
+
 items = [
     {"name": "Item 1"}, {"name": "Item 2"}, {"name": "Item 3"}, {"name": "Item 4"}, {"name": "Item 5"},
     {"name": "Item 6"}, {"name": "Item 7"}, {"name": "Item 8"}, {"name": "Item 9"}, {"name": "Item 10"},
@@ -50,12 +57,6 @@ items = [
 
 @app.get("/items/")
 async def read_items(skip: int = 0, limit: int = 10):
-    """
-    Query Parameter
-    :param skip:
-    :param limit:
-    :return:
-    """
     return items[skip: skip+limit]
 
 
@@ -70,13 +71,12 @@ async def read_user_item(user_id: int, item_id: str, q: Optional[str] = None, sh
     return item
 
 
-class Item(BaseModel):
-    name: str
-    description: Optional[str] = None
-    price: float
-    tax: Optional[float] = None
 
 
 @app.post("/items/")
 async def create_item(item: Item):
-    return item
+    item_dict = item.dict()
+    if item.tax:
+        price_with_tax = item.price + item.tax
+        item_dict.update({"price_with_tax": price_with_tax})
+    return item_dict
