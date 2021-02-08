@@ -30,3 +30,23 @@ async def get_model(model_name: ModelName):
         return {"model_name": model_name, "message": "LeCNN all the images"}
 
     return {"model_name": model_name, "message": "Have some residuals"}
+
+
+items = [
+    {"name": "Item 1"}, {"name": "Item 2"}, {"name": "Item 3"}, {"name": "Item 4"}, {"name": "Item 5"},
+    {"name": "Item 6"}, {"name": "Item 7"}, {"name": "Item 8"}, {"name": "Item 9"}, {"name": "Item 10"},
+    {"name": "Item 11"}, {"name": "Item 12"}, {"name": "Item 13"}, {"name": "Item 14"}, {"name": "Item 15"},
+    {"name": "Item 16"}, {"name": "Item 17"}, {"name": "Item 18"}, {"name": "Item 19"}, {"name": "Item 20"},
+
+]
+
+
+@app.get("/items/")
+async def read_items(skip: int = 0, limit: int = 10):
+    """
+    Query Parameter
+    :param skip:
+    :param limit:
+    :return:
+    """
+    return items[skip: skip+limit]
